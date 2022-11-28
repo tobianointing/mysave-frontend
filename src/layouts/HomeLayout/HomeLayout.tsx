@@ -10,6 +10,7 @@ import {
   Container,
   UnstyledButton,
   MediaQuery,
+  Transition,
 } from "@mantine/core"
 import { useState } from "react"
 import { Outlet } from "react-router-dom"
@@ -153,6 +154,7 @@ export default function HomeLayout(props: Props) {
           sx={(theme) => ({
             backgroundColor: theme.colors.blue[7],
             padding: "3rem 1.5rem 1rem",
+            transition: "width .3s ease",
           })}
         >
           <Navbar.Section>
@@ -262,12 +264,16 @@ function NavLink(props: NavLinkProps) {
         <Box>
           <props.icon />
         </Box>
-        <Box
-          hidden={props.mopened}
-          className={props.label === props.active ? classes.linkActive : ""}
-        >
-          <Text>{props.label}</Text>
-        </Box>
+        <Transition mounted={!props.mopened ?? false} transition="fade" duration={200} timingFunction="ease">
+          {(styles) => (
+            <Box
+              // hidden={props.mopened}
+              className={props.label === props.active && !props.mopened ? classes.linkActive : ""}
+            >
+              <Text>{props.label}</Text>
+            </Box>
+          )}
+        </Transition>
       </Group>
     </UnstyledButton>
   )

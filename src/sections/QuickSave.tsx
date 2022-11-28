@@ -16,6 +16,10 @@ export default function QuickSave() {
       amount: "",
       reason: "",
     },
+    
+    validate: {
+      amount: (value) => (typeof value === "string" ? "Enter a number" : Number(value) < 100 ? "Minimum of ₦100" : null),
+    },
   })
 
   const saveMoney = async (values: any) => {

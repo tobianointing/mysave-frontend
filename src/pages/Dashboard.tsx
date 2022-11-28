@@ -17,12 +17,12 @@ import { useAuth, useStore } from "../../src/store"
 type Props = {}
 
 export default function Dashboard(props: Props) {
-  const { section, setSection, opened, setOpened } = useStore((state: any) => ({
-    section: state.section,
-    setSection: state.setSection,
-    opened: state.opened,
-    setOpened: state.setOpened,
-  }))
+  const [section, setSection, opened, setOpened] = useStore((state: any) => [
+    state.section,
+    state.setSection,
+    state.opened,
+    state.setOpened,
+  ])
 
   const [userData] = useAuth((state: any) => [state.userData])
 

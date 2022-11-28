@@ -6,12 +6,13 @@ import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import { CustomNumberInput } from "../components/CustomNumberInput"
 import { CustomTextInput } from "../components/CustomTextInput"
-import { useAuth } from "../store"
+import { useAuth, useStore } from "../store"
 
 export default function Withdraw() {
   const largeScreen = useMediaQuery("(min-width: 900px)")
 
   const [setBalance, userData] = useAuth((state: any) => [state.setBalance, state.userData])
+  const [setOpened] = useStore((state: any) => [state.setOpened])
 
   const token = localStorage.getItem("token") ?? ""
 
@@ -23,6 +24,11 @@ export default function Withdraw() {
       reason: "",
       narration: "",
       password: "",
+    },
+
+    validate: {
+      dest_acct: (value) => (value.length < 10 ? "Account number must have be 10 numbers" : null),
+      amount: (value) => (typeof value === "string" ? "Enter a number" : Number(value) < 100 ? "Minimum of ₦100" : null),
     },
   })
 
@@ -40,11 +46,10 @@ export default function Withdraw() {
     return json
   }
 
-  const navigate = useNavigate()
 
   const mutation = useMutation({
     mutationFn: saveMoney,
-    onSuccess: async (data, variables, context) => {
+    onSuccess: async (data, variables) => {
       if (data.status === 0) {
         showNotification({
           message: data.message,
@@ -53,7 +58,7 @@ export default function Withdraw() {
       } else if (data.status === 1) {
         setBalance(Number(userData.balance) - Number(variables.amount))
 
-        navigate("/")
+        setOpened(false)
 
         showNotification({
           message: data.message,
@@ -61,7 +66,7 @@ export default function Withdraw() {
         })
       }
     },
-    onError: (error, variables, context) => {
+    onError: (error) => {
       // An error happened!
       console.log(error)
     },
@@ -79,7 +84,7 @@ export default function Withdraw() {
         Withdraw to Bank
       </Text>
       <Text
-        sx={(theme) => ({
+        sx={() => ({
           fontSize: ".875rem",
         })}
       >
@@ -90,10 +95,16 @@ export default function Withdraw() {
         <form onSubmit={form.onSubmit((values) => mutation.mutate(values))}>
           <Stack>
             <CustomNumberInput
-              label="Amount to withdraw for now (minimum: ₦2,000.00)"
+              label="Amount to withdraw for now (minimum: ₦100.00)"
               placeholder={"Enter Amount"}
               size="lg"
               required
+              parser={(value: string) => value.replace(/₦\s?|(,*)/g, "")}
+              formatter={(value: string) =>
+                !Number.isNaN(parseFloat(value))
+                  ? `₦ ${value}`.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                  : "₦ "
+              }
               {...form.getInputProps("amount")}
             />
 
