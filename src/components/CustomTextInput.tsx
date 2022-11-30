@@ -6,6 +6,7 @@ interface CustomTextInputProps {
   placeholder?: string
   size?: MantineSize 
   required? :boolean
+  readonly?: boolean
 }
 
 export function CustomTextInput(props: CustomTextInputProps) {
@@ -17,8 +18,9 @@ export function CustomTextInput(props: CustomTextInputProps) {
       // label={props.label}
       labelProps={{ size: "xs", mb: "xs" }}
       placeholder={props.placeholder}
-      styles={{ input: { fontSize: "16px" } }}
+      styles={{ input: { fontSize: "16px",  } }}
       required={props.required}
+      readOnly={props.readonly}
       {...props}
     />
   )

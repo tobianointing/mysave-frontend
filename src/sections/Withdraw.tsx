@@ -33,7 +33,7 @@ export default function Withdraw() {
   })
 
   const saveMoney = async (values: any) => {
-    const res = await fetch("http://localhost/mysave/backend/users/debit", {
+    const res = await fetch("https://eviafrica.com/mysave/users/debit", {
       method: "POST",
       body: JSON.stringify(values),
       headers: {

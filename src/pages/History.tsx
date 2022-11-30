@@ -8,7 +8,7 @@ export default function History() {
   const token = localStorage.getItem("token")
 
   const fetchHistory = async () => {
-    const res = await fetch("http://localhost/mysave/backend/users/history", {
+    const res = await fetch("https://eviafrica.com/mysave/users/history", {
       headers: {
         Authorization: token ?? "",
       },

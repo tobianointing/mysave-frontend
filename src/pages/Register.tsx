@@ -26,7 +26,7 @@ export default function Register(props: Props) {
   })
 
   const regUser = async (values: any) => {
-    const res = await fetch("http://localhost/mysave/backend/signup", {
+    const res = await fetch("https://eviafrica.com/mysave/signup", {
       method: "POST",
       body: JSON.stringify(values),
     })

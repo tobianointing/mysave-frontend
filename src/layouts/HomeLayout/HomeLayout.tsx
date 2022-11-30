@@ -107,7 +107,7 @@ export default function HomeLayout(props: Props) {
   const token = localStorage.getItem("token")
 
   const getUserData = async () => {
-    const res = await fetch("http://localhost/mysave/backend/users", {
+    const res = await fetch("https://eviafrica.com/mysave/users", {
       headers: {
         Authorization: token ?? "",
       },

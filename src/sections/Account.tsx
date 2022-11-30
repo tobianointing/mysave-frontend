@@ -25,7 +25,7 @@ export default function Account() {
   })
 
   const updateAccount = async (values: any) => {
-    const res = await fetch("http://localhost/mysave/backend/users", {
+    const res = await fetch("https://eviafrica.com/mysave/users", {
       method: "PATCH",
       body: JSON.stringify(values),
       headers: {
@@ -88,6 +88,12 @@ export default function Account() {
               label="Last Name"
               placeholder="Jay"
               {...form.getInputProps("last_name")}
+            />
+            <CustomTextInput
+              label="Account Number"
+              placeholder="09034558922"
+              readonly={true}
+              {...form.getInputProps("phone")}
             />
             <CustomTextInput
               label="Email"

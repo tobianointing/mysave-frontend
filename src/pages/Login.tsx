@@ -34,7 +34,7 @@ export default function Login(props: Props) {
   const largeScreen = useMediaQuery("(min-width: 900px)")
 
   const loginUser = async (values: any) => {
-    const res = await fetch("http://localhost/mysave/backend/login", {
+    const res = await fetch("https://eviafrica.com/mysave/login", {
       method: "POST",
       body: JSON.stringify(values),
     })

@@ -23,7 +23,7 @@ export default function QuickSave() {
   })
 
   const saveMoney = async (values: any) => {
-    const res = await fetch("http://localhost/mysave/backend/users/credit", {
+    const res = await fetch("https://eviafrica.com/mysave/users/credit", {
       method: "POST",
       body: JSON.stringify(values),
       headers: {
