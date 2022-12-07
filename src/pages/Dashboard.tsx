@@ -1,20 +1,13 @@
-import { Group, Stack, Text, Box, createStyles, Drawer, useMantineColorScheme } from "@mantine/core"
+import { Group, Stack, Text, Box, createStyles, Drawer } from "@mantine/core"
 // @ts-ignore
 import { Carousel } from "@mantine/carousel"
-import {
-  TablerIcon,
-  IconPlus,
-  IconStrikethrough,
-  IconTrendingUp,
-  IconShield,
-  IconSunHigh,
-  IconMoonStars,
-} from "@tabler/icons"
+import { TablerIcon, IconPlus, IconStrikethrough, IconTrendingUp, IconShield } from "@tabler/icons"
 import QuickSave from "../sections/QuickSave"
 import Withdraw from "../sections/Withdraw"
 import Account from "../sections/Account"
 import { useAuth, useStore } from "../../src/store"
 import { useMediaQuery } from "@mantine/hooks"
+import Header from "../sections/Header"
 
 type Props = {}
 
@@ -35,61 +28,9 @@ export default function Dashboard(props: Props) {
 
   const largeScreen = useMediaQuery("(min-width: 900px)")
 
-  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
-  const dark = colorScheme === "dark"
-
   return (
     <>
-      <Group position="apart">
-        <Stack spacing={0}>
-          <Text
-            sx={(theme) => ({
-              fontSize: "1.5rem",
-              fontWeight: 700,
-
-              [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-                fontSize: "1.875rem",
-              },
-            })}
-          >
-            {userData.first_name ?? ""}
-          </Text>
-          <Text
-            sx={(theme) => ({
-              fontSize: "0.875rem",
-
-              [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-                fontSize: "1rem",
-              },
-            })}
-          >
-            Good afternoon, wash your hands 🌞
-          </Text>
-        </Stack>
-
-        <Box
-          sx={(theme) => ({
-            borderRadius: "50%",
-            padding: ".4rem",
-            backgroundColor: theme.colors.blue[7],
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-
-            [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-              padding: theme.spacing.sm,
-            },
-          })}
-          onClick={() => toggleColorScheme()}
-        >
-          {dark ? (
-            <IconMoonStars color={"#C1C2C5"} size={24} />
-          ) : (
-            <IconSunHigh color={"white"} size={24} />
-          )}
-        </Box>
-      </Group>
+      <Header title={userData.first_name ?? ""} />
 
       <Box mt={48}>
         <Carousel slideSize="10%" slideGap="sm" align="start" withControls={false}>

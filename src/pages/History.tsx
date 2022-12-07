@@ -3,6 +3,7 @@ import { IconBell } from "@tabler/icons"
 import { Table } from "@mantine/core"
 import { useQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
+import Header from "../sections/Header"
 
 export default function History() {
   const token = localStorage.getItem("token")
@@ -40,50 +41,7 @@ export default function History() {
 
   return (
     <>
-      <Group position="apart">
-        <Stack spacing={0}>
-          <Text
-            sx={(theme) => ({
-              fontSize: "1.5rem",
-              fontWeight: 700,
-              color: theme.colors.blue[7],
-
-              [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-                fontSize: "1.875rem",
-              },
-            })}
-          >
-            History
-          </Text>
-          <Text
-            sx={(theme) => ({
-              fontSize: "0.875rem",
-
-              [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-                fontSize: "1rem",
-              },
-            })}
-          >
-            Good afternoon, wash your hands 🌙
-          </Text>
-        </Stack>
-
-        <Box
-          sx={(theme) => ({
-            borderRadius: "50%",
-            padding: theme.spacing.xs,
-            backgroundColor: theme.colors.blue[7],
-            display: "flex",
-            alignItems: "center",
-
-            [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
-              padding: theme.spacing.sm,
-            },
-          })}
-        >
-          <IconBell color={"white"} />
-        </Box>
-      </Group>
+      <Header title="History" />
 
       <Box mt={48}>
         <HistoryTable data={tableData} />
