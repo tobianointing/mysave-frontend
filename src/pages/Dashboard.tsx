@@ -144,7 +144,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
       display: "flex",
       borderRadius: theme.radius.md,
       borderEndStartRadius: "0",
-      padding: "1rem 2rem",
+      padding: "2rem 3rem",
       border:
         theme.colorScheme === "dark" ? theme.colors.dark[2] : `1px solid ${theme.colors.blue[7]}`,
       color: theme.colorScheme === "dark" ? theme.colors.dark[2] : theme.colors.dark[9],
