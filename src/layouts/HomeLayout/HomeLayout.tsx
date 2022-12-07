@@ -35,16 +35,16 @@ const useStyles = createStyles((theme, _params, getRef) => {
     link: {
       ...theme.fn.focusStyles(),
       textDecoration: "none",
-      color: theme.colorScheme === "dark" ? theme.colors.dark[1] : "white",
+      color: theme.colorScheme === "dark" ? theme.colors.dark[0] : "white",
       fontWeight: 500,
       fontSize: "1rem",
     },
 
     mobileLink: {
       ...theme.fn.focusStyles(),
-      color: theme.colorScheme === "dark" ? theme.colors.dark[1] : theme.colors.dark[1],
+      color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.colors.dark[1],
       fontWeight: 500,
-      fontSize: "1rem",
+      fontSize: ".75rem",
     },
 
     mobileIcon: {
@@ -53,7 +53,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
     },
 
     mobileIconActive: {
-      color: theme.colorScheme === "dark" ? theme.colors.dark[2] : theme.colors.blue[7],
+      color: theme.colors.blue[7],
     },
 
     linkIcon: {
@@ -63,12 +63,12 @@ const useStyles = createStyles((theme, _params, getRef) => {
     },
 
     linkActive: {
-      backgroundColor: "white",
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[0] : "white",
       borderRadius: theme.radius.md,
       borderEndStartRadius: "0",
       padding: "0.25rem 2.5rem 0.25rem 1.5rem",
       fontWeight: 500,
-      color: theme.colorScheme === "dark" ? "white" : theme.colors.dark[9],
+      color: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.dark[9],
     },
 
     mobileLinkActive: {
@@ -224,7 +224,7 @@ export default function HomeLayout(props: Props) {
             bottom: 0,
             left: 0,
             right: 0,
-            backgroundColor: theme.colors.gray[2],
+            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2],
           })}
           py="md"
           px={"lg"}
@@ -239,6 +239,14 @@ export default function HomeLayout(props: Props) {
                 onClick={() => handleDrawerSwitch(elem.label)}
               />
             ))}
+            <MobileLink
+              icon={IconLogout}
+              label={"Logout"}
+              link={""}
+              active={active}
+              onClick={logout}
+              mopened={mopened}
+            />
           </Group>
         </Box>
       </MediaQuery>
@@ -264,7 +272,12 @@ function NavLink(props: NavLinkProps) {
         <Box>
           <props.icon />
         </Box>
-        <Transition mounted={!props.mopened ?? false} transition="fade" duration={200} timingFunction="ease">
+        <Transition
+          mounted={!props.mopened ?? false}
+          transition="fade"
+          duration={200}
+          timingFunction="ease"
+        >
           {(styles) => (
             <Box
               // hidden={props.mopened}

@@ -4,10 +4,11 @@ import { showNotification } from "@mantine/notifications"
 import { useMutation } from "@tanstack/react-query"
 import { useNavigate } from "react-router-dom"
 import { CustomNumberInput } from "../components/CustomNumberInput"
-import { useAuth } from "../store"
+import { useAuth, useStore } from "../store"
 
 export default function QuickSave() {
   const [setBalance, userData] = useAuth((state: any) => [state.setBalance, state.userData])
+  const [setOpened] = useStore((state: any) => [state.setOpened])
 
   const token = localStorage.getItem("token") ?? ""
 
@@ -48,6 +49,8 @@ export default function QuickSave() {
         })
       } else if (data.status === 1) {
         setBalance(Number(userData.balance) + Number(variables.amount))
+
+        setOpened(false)
 
         navigate("/")
 
@@ -111,9 +114,9 @@ export default function QuickSave() {
               labelProps={{ size: "xs", mb: "xs" }}
               styles={{ input: { fontSize: "16px" }, item: { fontSize: "16px" } }}
               data={[
-                { value: "Sapa", label: "Sapa" },
-                { value: "Ball", label: "I wan Ball" },
-                { value: "Babe", label: "Babe Salary" },
+                { value: "Iphone 14 pro max", label: "Iphone 14 pro max" },
+                { value: "PS5", label: "PS5" },
+                { value: "Bone Straight", label: "Bone Straight" },
               ]}
               {...form.getInputProps("reason")}
             />

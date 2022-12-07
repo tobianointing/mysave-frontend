@@ -1,18 +1,20 @@
-import { Group, Stack, Text, Box, createStyles, Drawer } from "@mantine/core"
+import { Group, Stack, Text, Box, createStyles, Drawer, useMantineColorScheme } from "@mantine/core"
 // @ts-ignore
 import { Carousel } from "@mantine/carousel"
 import {
-  IconBell,
   TablerIcon,
   IconPlus,
   IconStrikethrough,
   IconTrendingUp,
   IconShield,
+  IconSunHigh,
+  IconMoonStars,
 } from "@tabler/icons"
 import QuickSave from "../sections/QuickSave"
 import Withdraw from "../sections/Withdraw"
 import Account from "../sections/Account"
 import { useAuth, useStore } from "../../src/store"
+import { useMediaQuery } from "@mantine/hooks"
 
 type Props = {}
 
@@ -30,6 +32,11 @@ export default function Dashboard(props: Props) {
     setOpened(true)
     setSection(section)
   }
+
+  const largeScreen = useMediaQuery("(min-width: 900px)")
+
+  const { colorScheme, toggleColorScheme } = useMantineColorScheme()
+  const dark = colorScheme === "dark"
 
   return (
     <>
@@ -63,17 +70,24 @@ export default function Dashboard(props: Props) {
         <Box
           sx={(theme) => ({
             borderRadius: "50%",
-            padding: theme.spacing.xs,
+            padding: ".4rem",
             backgroundColor: theme.colors.blue[7],
             display: "flex",
             alignItems: "center",
+            justifyContent: "center",
+            cursor: "pointer",
 
             [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
               padding: theme.spacing.sm,
             },
           })}
+          onClick={() => toggleColorScheme()}
         >
-          <IconBell color={"white"} />
+          {dark ? (
+            <IconMoonStars color={"#C1C2C5"} size={24} />
+          ) : (
+            <IconSunHigh color={"white"} size={24} />
+          )}
         </Box>
       </Group>
 
@@ -98,7 +112,7 @@ export default function Dashboard(props: Props) {
         </Carousel>
       </Box>
 
-      <Group mt={50}>
+      <Group mt={50} px={largeScreen ? 0 : "sm"}>
         <ButtonCard
           title={"Quick save"}
           icon={IconPlus}
@@ -190,8 +204,10 @@ const useStyles = createStyles((theme, _params, getRef) => {
       borderRadius: theme.radius.md,
       borderEndStartRadius: "0",
       padding: "1rem 2rem",
-      border: `1px solid ${theme.colors.blue[7]}`,
-      color: theme.colorScheme === "dark" ? "white" : theme.colors.dark[9],
+      border:
+        theme.colorScheme === "dark" ? theme.colors.dark[2] : `1px solid ${theme.colors.blue[7]}`,
+      color: theme.colorScheme === "dark" ? theme.colors.dark[2] : theme.colors.dark[9],
+      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : "",
       cursor: "pointer",
       textTransform: "uppercase",
       fontSize: "1rem",
@@ -208,11 +224,11 @@ const useStyles = createStyles((theme, _params, getRef) => {
       width: "266px",
       height: "130x",
       display: "flex",
-      backgroundColor: theme.colors.grape[7],
+      // backgroundColor: theme.colors.grape[7],
       borderRadius: theme.radius.md,
       borderEndStartRadius: "0",
       padding: "2rem 3rem 2rem 1rem",
-      color: theme.colorScheme === "dark" ? theme.colors.dark[9] : "white",
+      color: theme.colorScheme === "dark" ? theme.colors.dark[0] : "white",
 
       [`@media (min-width: ${theme.breakpoints.xs}px)`]: {
         width: "250px",
@@ -228,7 +244,7 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
     cardIcon: {
       ref: icon,
-      color: theme.colorScheme === "dark" ? theme.colors.dark[2] : "white",
+      color: theme.colorScheme === "dark" ? theme.colors.dark[0] : "white",
       marginRight: theme.spacing.sm,
       width: "32px",
       height: "32px",

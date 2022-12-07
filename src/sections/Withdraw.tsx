@@ -140,9 +140,9 @@ export default function Withdraw() {
               labelProps={{ size: "xs", mb: "xs" }}
               styles={{ input: { fontSize: "16px" }, item: { fontSize: "16px" } }}
               data={[
-                { value: "Food", label: "Food" },
-                { value: "Bill", label: "Bill" },
-                { value: "Rent", label: "Rent" },
+                { value: "Sapa", label: "Sapa" },
+                { value: "Omo x2000 😫", label: "Omo x2000 😫" },
+                { value: "Hostel Rent", label: "Hostel Rent" },
               ]}
               required
               {...form.getInputProps("reason")}
