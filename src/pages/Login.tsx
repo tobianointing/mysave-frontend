@@ -1,14 +1,14 @@
-import { Card, Stack, Text, Button, PasswordInput } from "@mantine/core"
-import { Link } from "react-router-dom"
-import { CustomTextInput } from "../components/CustomTextInput"
-import { useForm } from "@mantine/form"
-import { useMediaQuery } from "@mantine/hooks"
-import { useMutation } from "@tanstack/react-query"
-import { showNotification } from "@mantine/notifications"
-import { useAuth } from "../store"
-import { useNavigate } from "react-router-dom"
+import { Card, Stack, Text, Button, PasswordInput } from "@mantine/core";
+import { Link } from "react-router-dom";
+import { CustomTextInput } from "../components/CustomTextInput";
+import { useForm } from "@mantine/form";
+import { useMediaQuery } from "@mantine/hooks";
+import { useMutation } from "@tanstack/react-query";
+import { showNotification } from "@mantine/notifications";
+import { useAuth } from "../store";
+import { useNavigate } from "react-router-dom";
 
-type Props = {}
+type Props = {};
 
 export default function Login(props: Props) {
   const form = useForm({
@@ -19,30 +19,34 @@ export default function Login(props: Props) {
 
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      password: (value) => (value.length < 4 ? "Password must have at least 4 letters" : null),
+      password: (value) =>
+        value.length < 4 ? "Password must have at least 4 letters" : null,
     },
-  })
+  });
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [setIsAuthenticated, setToken, setUserData] = useAuth((state: any) => [
     state.setIsAuthenticated,
     state.setToken,
-    state.setUserData
-  ])
+    state.setUserData,
+  ]);
 
-  const largeScreen = useMediaQuery("(min-width: 900px)")
+  const largeScreen = useMediaQuery("(min-width: 900px)");
 
   const loginUser = async (values: any) => {
-    const res = await fetch("https://eviafrica.com/mysave/login", {
-      method: "POST",
-      body: JSON.stringify(values),
-    })
+    const res = await fetch(
+      "https://mysave-backend.000webhostapp.com/mysave/backend/login",
+      {
+        method: "POST",
+        body: JSON.stringify(values),
+      }
+    );
 
-    const json = await res.json()
+    const json = await res.json();
 
-    return json
-  }
+    return json;
+  };
 
   const mutation = useMutation({
     mutationFn: loginUser,
@@ -51,26 +55,25 @@ export default function Login(props: Props) {
         showNotification({
           message: data.message,
           color: "red",
-        })
+        });
       } else if (data.status === 1) {
-        localStorage.setItem("token", data.token)
-        localStorage.setItem("userId", data.user_id)
-        setIsAuthenticated(true)
-        setUserData(data.result)
-        navigate("/")
-        setToken(data.token)
+        localStorage.setItem("token", data.token);
+        localStorage.setItem("userId", data.user_id);
+        setIsAuthenticated(true);
+        setUserData(data.result);
+        navigate("/");
+        setToken(data.token);
         showNotification({
           message: data.message,
           color: "blue",
-        })
-
+        });
       }
     },
     onError: (error, variables, context) => {
       // An error happened!
-      console.log(error)
+      console.log(error);
     },
-  })
+  });
 
   return (
     <>
@@ -135,11 +138,11 @@ export default function Login(props: Props) {
         </Text>
       </Stack>
     </>
-  )
+  );
 }
 
 interface AuthCardProps {
-  children: JSX.Element | JSX.Element[]
+  children: JSX.Element | JSX.Element[];
 }
 
 export function AuthCard(props: AuthCardProps) {
@@ -159,12 +162,12 @@ export function AuthCard(props: AuthCardProps) {
     >
       {props.children}
     </Card>
-  )
+  );
 }
 
 interface AuthHeaderProps {
-  primaryText: string
-  secondaryText: string
+  primaryText: string;
+  secondaryText: string;
 }
 
 export function AuthHeader(props: AuthHeaderProps) {
@@ -195,5 +198,5 @@ export function AuthHeader(props: AuthHeaderProps) {
         {props.secondaryText}
       </Text>
     </Stack>
-  )
+  );
 }

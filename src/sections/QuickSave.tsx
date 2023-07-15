@@ -1,43 +1,54 @@
-import { Box, Stack, Select, Button, Text } from "@mantine/core"
-import { useForm } from "@mantine/form"
-import { showNotification } from "@mantine/notifications"
-import { useMutation } from "@tanstack/react-query"
-import { useNavigate } from "react-router-dom"
-import { CustomNumberInput } from "../components/CustomNumberInput"
-import { useAuth, useStore } from "../store"
+import { Box, Stack, Select, Button, Text } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { CustomNumberInput } from "../components/CustomNumberInput";
+import { useAuth, useStore } from "../store";
 
 export default function QuickSave() {
-  const [setBalance, userData] = useAuth((state: any) => [state.setBalance, state.userData])
-  const [setOpened] = useStore((state: any) => [state.setOpened])
+  const [setBalance, userData] = useAuth((state: any) => [
+    state.setBalance,
+    state.userData,
+  ]);
+  const [setOpened] = useStore((state: any) => [state.setOpened]);
 
-  const token = localStorage.getItem("token") ?? ""
+  const token = localStorage.getItem("token") ?? "";
 
   const form = useForm({
     initialValues: {
       amount: "",
       reason: "",
     },
-    
+
     validate: {
-      amount: (value) => (typeof value === "string" ? "Enter a number" : Number(value) < 100 ? "Minimum of ₦100" : null),
+      amount: (value) =>
+        typeof value === "string"
+          ? "Enter a number"
+          : Number(value) < 100
+          ? "Minimum of ₦100"
+          : null,
     },
-  })
+  });
 
   const saveMoney = async (values: any) => {
-    const res = await fetch("https://eviafrica.com/mysave/users/credit", {
-      method: "POST",
-      body: JSON.stringify(values),
-      headers: {
-        Authorization: token,
-      },
-    })
+    const res = await fetch(
+      "https://mysave-backend.000webhostapp.com/mysave/backend/users/credit",
+      {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
 
-    const json = await res.json()
+    const json = await res.json();
 
-    return json
-  }
+    return json;
+  };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: saveMoney,
@@ -46,25 +57,25 @@ export default function QuickSave() {
         showNotification({
           message: data.message,
           color: "red",
-        })
+        });
       } else if (data.status === 1) {
-        setBalance(Number(userData.balance) + Number(variables.amount))
+        setBalance(Number(userData.balance) + Number(variables.amount));
 
-        setOpened(false)
+        setOpened(false);
 
-        navigate("/")
+        navigate("/");
 
         showNotification({
           message: data.message,
           color: "blue",
-        })
+        });
       }
     },
     onError: (error, variables, context) => {
       // An error happened!
-      console.log(error)
+      console.log(error);
     },
-  })
+  });
 
   return (
     <>
@@ -112,7 +123,10 @@ export default function QuickSave() {
               label="Choose a Reason"
               placeholder="Why?"
               labelProps={{ size: "xs", mb: "xs" }}
-              styles={{ input: { fontSize: "16px" }, item: { fontSize: "16px" } }}
+              styles={{
+                input: { fontSize: "16px" },
+                item: { fontSize: "16px" },
+              }}
               data={[
                 { value: "Iphone 14 pro max", label: "Iphone 14 pro max" },
                 { value: "PS5", label: "PS5" },
@@ -123,7 +137,7 @@ export default function QuickSave() {
           </Stack>
 
           <Button
-          fullWidth
+            fullWidth
             mt={48}
             size={"lg"}
             type={"submit"}
@@ -140,5 +154,5 @@ export default function QuickSave() {
         </form>
       </Box>
     </>
-  )
+  );
 }

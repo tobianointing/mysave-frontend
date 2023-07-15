@@ -1,24 +1,27 @@
-import { Group, Stack, Text, Box } from "@mantine/core"
-import { IconBell } from "@tabler/icons"
-import { Table } from "@mantine/core"
-import { useQuery } from "@tanstack/react-query"
-import dayjs from "dayjs"
-import Header from "../sections/Header"
+import { Group, Stack, Text, Box } from "@mantine/core";
+import { IconBell } from "@tabler/icons";
+import { Table } from "@mantine/core";
+import { useQuery } from "@tanstack/react-query";
+import dayjs from "dayjs";
+import Header from "../sections/Header";
 
 export default function History() {
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("token");
 
   const fetchHistory = async () => {
-    const res = await fetch("https://eviafrica.com/mysave/users/history", {
-      headers: {
-        Authorization: token ?? "",
-      },
-    })
+    const res = await fetch(
+      "https://mysave-backend.000webhostapp.com/mysave/backend/users/history",
+      {
+        headers: {
+          Authorization: token ?? "",
+        },
+      }
+    );
 
-    const json = await res.json()
+    const json = await res.json();
 
-    return json
-  }
+    return json;
+  };
 
   const { data } = useQuery({
     queryKey: ["history"],
@@ -26,17 +29,17 @@ export default function History() {
     select: (data) =>
       data.results
         .sort((a: any, b: any) => {
-          return new Date(a.date).getTime() - new Date(b.date).getTime()
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
         })
         .reverse(),
-  })
+  });
 
-  let tableData
+  let tableData;
 
   if (data) {
-    tableData = data
+    tableData = data;
   } else {
-    tableData = []
+    tableData = [];
   }
 
   return (
@@ -47,11 +50,11 @@ export default function History() {
         <HistoryTable data={tableData} />
       </Box>
     </>
-  )
+  );
 }
 
 interface HistoryTableProps {
-  data: any[]
+  data: any[];
 }
 
 function HistoryTable(props: HistoryTableProps) {
@@ -62,10 +65,10 @@ function HistoryTable(props: HistoryTableProps) {
       <th>Status</th>
       <th> Date</th>
     </tr>
-  )
+  );
 
   const rows = props.data.map((element) => {
-    const date = dayjs(element.date).format("ddd, DD MMM YYYY hh:mm:ss")
+    const date = dayjs(element.date).format("ddd, DD MMM YYYY hh:mm:ss");
     return (
       <tr key={element.id}>
         <td>{element.amount}</td>
@@ -73,13 +76,13 @@ function HistoryTable(props: HistoryTableProps) {
         <td>{element.status}</td>
         <td>{date}</td>
       </tr>
-    )
-  })
+    );
+  });
 
   return (
     <Table>
       <thead>{ths}</thead>
       <tbody>{rows}</tbody>
     </Table>
-  )
+  );
 }

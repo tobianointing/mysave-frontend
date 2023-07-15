@@ -1,15 +1,18 @@
-import { Box, Stack, Button, Text } from "@mantine/core"
-import { useForm } from "@mantine/form"
-import { showNotification } from "@mantine/notifications"
-import { useMutation } from "@tanstack/react-query"
-import { CustomTextInput } from "../components/CustomTextInput"
-import { useAuth, useStore } from "../store"
+import { Box, Stack, Button, Text } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
+import { useMutation } from "@tanstack/react-query";
+import { CustomTextInput } from "../components/CustomTextInput";
+import { useAuth, useStore } from "../store";
 
 export default function Account() {
-  const [userData, setUserData] = useAuth((state: any) => [state.userData, state.setUserData])
-  const [setOpened] = useStore((state: any) => [state.setOpened])
+  const [userData, setUserData] = useAuth((state: any) => [
+    state.userData,
+    state.setUserData,
+  ]);
+  const [setOpened] = useStore((state: any) => [state.setOpened]);
 
-  const token = localStorage.getItem("token") ?? ""
+  const token = localStorage.getItem("token") ?? "";
 
   const form = useForm({
     initialValues: {
@@ -22,47 +25,50 @@ export default function Account() {
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
     },
-  })
+  });
 
   const updateAccount = async (values: any) => {
-    const res = await fetch("https://eviafrica.com/mysave/users", {
-      method: "PATCH",
-      body: JSON.stringify(values),
-      headers: {
-        Authorization: token,
-      },
-    })
+    const res = await fetch(
+      "https://mysave-backend.000webhostapp.com/mysave/backend/users",
+      {
+        method: "PATCH",
+        body: JSON.stringify(values),
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
 
-    const json = await res.json()
+    const json = await res.json();
 
-    return json
-  }
+    return json;
+  };
 
   const mutation = useMutation({
     mutationFn: updateAccount,
     onSuccess: async (data, variables) => {
-      console.log(data)
+      console.log(data);
       if (data.status === 1) {
-        setUserData(variables)
+        setUserData(variables);
 
         showNotification({
           message: data.message,
           color: "blue",
-        })
+        });
 
-        setOpened(false)
+        setOpened(false);
       } else if (data.status === 0) {
         showNotification({
           message: data.message,
           color: "red",
-        })
+        });
       }
     },
     onError: (error) => {
       // An error happened!
-      console.log(error)
+      console.log(error);
     },
-  })
+  });
 
   return (
     <>
@@ -125,5 +131,5 @@ export default function Account() {
         </form>
       </Box>
     </>
-  )
+  );
 }

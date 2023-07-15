@@ -1,12 +1,12 @@
-import { Stack, Button, Text, Select } from "@mantine/core"
-import { useForm } from "@mantine/form"
-import { showNotification } from "@mantine/notifications"
-import { useMutation } from "@tanstack/react-query"
-import { Link, useNavigate } from "react-router-dom"
-import { CustomTextInput } from "../components/CustomTextInput"
-import { AuthCard, AuthHeader } from "./Login"
+import { Stack, Button, Text, Select } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { showNotification } from "@mantine/notifications";
+import { useMutation } from "@tanstack/react-query";
+import { Link, useNavigate } from "react-router-dom";
+import { CustomTextInput } from "../components/CustomTextInput";
+import { AuthCard, AuthHeader } from "./Login";
 
-type Props = {}
+type Props = {};
 
 export default function Register(props: Props) {
   const form = useForm({
@@ -21,22 +21,26 @@ export default function Register(props: Props) {
 
     validate: {
       email: (value) => (/^\S+@\S+$/.test(value) ? null : "Invalid email"),
-      password: (value) => (value.length < 4 ? "Password must have at least 4 letters" : null),
+      password: (value) =>
+        value.length < 4 ? "Password must have at least 4 letters" : null,
     },
-  })
+  });
 
   const regUser = async (values: any) => {
-    const res = await fetch("https://eviafrica.com/mysave/signup", {
-      method: "POST",
-      body: JSON.stringify(values),
-    })
+    const res = await fetch(
+      "https://mysave-backend.000webhostapp.com/mysave/backend/signup",
+      {
+        method: "POST",
+        body: JSON.stringify(values),
+      }
+    );
 
-    const json = await res.json()
+    const json = await res.json();
 
-    return json
-  }
+    return json;
+  };
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const mutation = useMutation({
     mutationFn: regUser,
@@ -45,21 +49,21 @@ export default function Register(props: Props) {
         showNotification({
           message: data.message,
           color: "red",
-        })
+        });
       } else if (data.status === 1) {
-        navigate("/")
+        navigate("/");
 
         showNotification({
           message: data.message,
           color: "blue",
-        })
+        });
       }
     },
     onError: (error, variables, context) => {
       // An error happened!
-      console.log(error)
+      console.log(error);
     },
-  })
+  });
 
   return (
     <>
@@ -108,7 +112,10 @@ export default function Register(props: Props) {
               label="How Did You Hear About Us? (Optional)"
               placeholder="Tell us"
               labelProps={{ size: "xs", mb: "xs" }}
-              styles={{ input: { fontSize: "16px" }, item: { fontSize: "16px" } }}
+              styles={{
+                input: { fontSize: "16px" },
+                item: { fontSize: "16px" },
+              }}
               data={[
                 { value: "Whatsapp", label: "Whatsapp" },
                 { value: "Linkedin", label: "Linkedin" },
@@ -151,5 +158,5 @@ export default function Register(props: Props) {
         </Text>
       </Stack>
     </>
-  )
+  );
 }

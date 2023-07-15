@@ -11,9 +11,9 @@ import {
   UnstyledButton,
   MediaQuery,
   Transition,
-} from "@mantine/core"
-import { useState } from "react"
-import { Outlet } from "react-router-dom"
+} from "@mantine/core";
+import { useState } from "react";
+import { Outlet } from "react-router-dom";
 import {
   IconAddressBook,
   IconBrandFlightradar24,
@@ -21,15 +21,15 @@ import {
   IconLayoutDashboard,
   IconLogout,
   TablerIcon,
-} from "@tabler/icons"
-import { useAuth, useStore } from "../../store"
-import { useNavigate } from "react-router-dom"
-import { useQuery } from "@tanstack/react-query"
+} from "@tabler/icons";
+import { useAuth, useStore } from "../../store";
+import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 
-type Props = {}
+type Props = {};
 
 const useStyles = createStyles((theme, _params, getRef) => {
-  const icon = getRef("icon")
+  const icon = getRef("icon");
 
   return {
     link: {
@@ -42,14 +42,20 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
     mobileLink: {
       ...theme.fn.focusStyles(),
-      color: theme.colorScheme === "dark" ? theme.colors.dark[0] : theme.colors.dark[1],
+      color:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[0]
+          : theme.colors.dark[1],
       fontWeight: 500,
       fontSize: ".75rem",
     },
 
     mobileIcon: {
       ref: icon,
-      color: theme.colorScheme === "dark" ? theme.colors.dark[2] : theme.colors.gray[6],
+      color:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[2]
+          : theme.colors.gray[6],
     },
 
     mobileIconActive: {
@@ -58,89 +64,102 @@ const useStyles = createStyles((theme, _params, getRef) => {
 
     linkIcon: {
       ref: icon,
-      color: theme.colorScheme === "dark" ? theme.colors.dark[2] : theme.colors.gray[6],
+      color:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[2]
+          : theme.colors.gray[6],
       marginRight: theme.spacing.sm,
     },
 
     linkActive: {
-      backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[0] : "white",
+      backgroundColor:
+        theme.colorScheme === "dark" ? theme.colors.dark[0] : "white",
       borderRadius: theme.radius.md,
       borderEndStartRadius: "0",
       padding: "0.25rem 2.5rem 0.25rem 1.5rem",
       fontWeight: 500,
-      color: theme.colorScheme === "dark" ? theme.colors.dark[6] : theme.colors.dark[9],
+      color:
+        theme.colorScheme === "dark"
+          ? theme.colors.dark[6]
+          : theme.colors.dark[9],
     },
 
     mobileLinkActive: {
       color: theme.colorScheme === "dark" ? "white" : theme.colors.dark[9],
     },
-  }
-})
+  };
+});
 
 const mockdata = [
   { icon: IconLayoutDashboard, label: "Home", link: "" },
   { icon: IconBrandFlightradar24, label: "Save", link: "" },
   { icon: IconAddressBook, label: "History", link: "" },
   { icon: IconUser, label: "Account", link: "" },
-]
+];
 
 export default function HomeLayout(props: Props) {
-  const navigate = useNavigate()
-  const [mopened, msetOpened] = useState(false)
-  const [active, setActive] = useState("Home")
+  const navigate = useNavigate();
+  const [mopened, msetOpened] = useState(false);
+  const [active, setActive] = useState("Home");
 
   const { setSection, setOpened } = useStore((state: any) => ({
     section: state.section,
     setSection: state.setSection,
     opened: state.opened,
     setOpened: state.setOpened,
-  }))
+  }));
 
-  const [setUserData, setToken] = useAuth((state: any) => [state.setUserData, state.setToken])
+  const [setUserData, setToken] = useAuth((state: any) => [
+    state.setUserData,
+    state.setToken,
+  ]);
 
   const logout = () => {
-    localStorage.removeItem("token")
-    setToken("")
-    navigate("/")
-  }
+    localStorage.removeItem("token");
+    setToken("");
+    navigate("/");
+  };
 
-  const token = localStorage.getItem("token")
+  const token = localStorage.getItem("token");
 
   const getUserData = async () => {
-    const res = await fetch("https://eviafrica.com/mysave/users", {
-      headers: {
-        Authorization: token ?? "",
-      },
-    })
+    const res = await fetch(
+      "https://mysave-backend.000webhostapp.com/mysave/backend/users",
+      {
+        headers: {
+          Authorization: token ?? "",
+        },
+      }
+    );
 
-    const json = await res.json()
+    const json = await res.json();
 
-    return json
-  }
+    return json;
+  };
 
   const { data, isFetchedAfterMount } = useQuery({
     queryKey: ["userdata"],
     queryFn: getUserData,
-  })
+  });
 
   if (isFetchedAfterMount) {
-    setUserData(data)
+    setUserData(data);
   }
 
   const handleDrawerSwitch = (section: string): void => {
     if (section === "Home") {
-      setActive(section)
-      navigate("/")
+      setActive(section);
+      navigate("/");
     } else if (section === "History") {
-      setActive(section)
-      navigate("/history")
+      setActive(section);
+      navigate("/history");
     } else {
-      navigate("/")
-      setActive(section)
-      setOpened(true)
-      setSection(section)
+      navigate("/");
+      setActive(section);
+      setOpened(true);
+      setSection(section);
     }
-  }
+  };
 
   return (
     <AppShell
@@ -200,7 +219,9 @@ export default function HomeLayout(props: Props) {
       styles={(theme) => ({
         main: {
           backgroundColor:
-            theme.colorScheme === "dark" ? theme.colors.dark[8] : theme.colors.gray[0],
+            theme.colorScheme === "dark"
+              ? theme.colors.dark[8]
+              : theme.colors.gray[0],
         },
       })}
     >
@@ -224,7 +245,10 @@ export default function HomeLayout(props: Props) {
             bottom: 0,
             left: 0,
             right: 0,
-            backgroundColor: theme.colorScheme === "dark" ? theme.colors.dark[5] : theme.colors.gray[2],
+            backgroundColor:
+              theme.colorScheme === "dark"
+                ? theme.colors.dark[5]
+                : theme.colors.gray[2],
           })}
           py="md"
           px={"lg"}
@@ -251,20 +275,20 @@ export default function HomeLayout(props: Props) {
         </Box>
       </MediaQuery>
     </AppShell>
-  )
+  );
 }
 
 interface NavLinkProps {
-  icon: TablerIcon
-  label: string
-  link: string
-  active: string
-  onClick: () => void
-  mopened?: boolean
+  icon: TablerIcon;
+  label: string;
+  link: string;
+  active: string;
+  onClick: () => void;
+  mopened?: boolean;
 }
 
 function NavLink(props: NavLinkProps) {
-  const { classes } = useStyles()
+  const { classes } = useStyles();
 
   return (
     <UnstyledButton className={classes.link} onClick={props.onClick}>
@@ -281,7 +305,11 @@ function NavLink(props: NavLinkProps) {
           {(styles) => (
             <Box
               // hidden={props.mopened}
-              className={props.label === props.active && !props.mopened ? classes.linkActive : ""}
+              className={
+                props.label === props.active && !props.mopened
+                  ? classes.linkActive
+                  : ""
+              }
             >
               <Text>{props.label}</Text>
             </Box>
@@ -289,11 +317,11 @@ function NavLink(props: NavLinkProps) {
         </Transition>
       </Group>
     </UnstyledButton>
-  )
+  );
 }
 
 function MobileLink(props: NavLinkProps) {
-  const { classes, cx } = useStyles()
+  const { classes, cx } = useStyles();
   return (
     <UnstyledButton className={classes.mobileLink} onClick={props.onClick}>
       <Stack spacing={0} align="center">
@@ -302,10 +330,14 @@ function MobileLink(props: NavLinkProps) {
             [classes.mobileIconActive]: props.active === props.label,
           })}
         />
-        <Text className={props.label === props.active ? classes.mobileLinkActive : ""}>
+        <Text
+          className={
+            props.label === props.active ? classes.mobileLinkActive : ""
+          }
+        >
           {props.label}
         </Text>
       </Stack>
     </UnstyledButton>
-  )
+  );
 }

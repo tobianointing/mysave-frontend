@@ -1,20 +1,23 @@
-import { Box, Stack, Select, Button, Text, Textarea } from "@mantine/core"
-import { useForm } from "@mantine/form"
-import { useMediaQuery } from "@mantine/hooks"
-import { showNotification } from "@mantine/notifications"
-import { useMutation } from "@tanstack/react-query"
-import { useNavigate } from "react-router-dom"
-import { CustomNumberInput } from "../components/CustomNumberInput"
-import { CustomTextInput } from "../components/CustomTextInput"
-import { useAuth, useStore } from "../store"
+import { Box, Stack, Select, Button, Text, Textarea } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { useMediaQuery } from "@mantine/hooks";
+import { showNotification } from "@mantine/notifications";
+import { useMutation } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
+import { CustomNumberInput } from "../components/CustomNumberInput";
+import { CustomTextInput } from "../components/CustomTextInput";
+import { useAuth, useStore } from "../store";
 
 export default function Withdraw() {
-  const largeScreen = useMediaQuery("(min-width: 900px)")
+  const largeScreen = useMediaQuery("(min-width: 900px)");
 
-  const [setBalance, userData] = useAuth((state: any) => [state.setBalance, state.userData])
-  const [setOpened] = useStore((state: any) => [state.setOpened])
+  const [setBalance, userData] = useAuth((state: any) => [
+    state.setBalance,
+    state.userData,
+  ]);
+  const [setOpened] = useStore((state: any) => [state.setOpened]);
 
-  const token = localStorage.getItem("token") ?? ""
+  const token = localStorage.getItem("token") ?? "";
 
   const form = useForm({
     initialValues: {
@@ -27,25 +30,33 @@ export default function Withdraw() {
     },
 
     validate: {
-      dest_acct: (value) => (value.length < 10 ? "Account number must have be 10 numbers" : null),
-      amount: (value) => (typeof value === "string" ? "Enter a number" : Number(value) < 100 ? "Minimum of ₦100" : null),
+      dest_acct: (value) =>
+        value.length < 10 ? "Account number must have be 10 numbers" : null,
+      amount: (value) =>
+        typeof value === "string"
+          ? "Enter a number"
+          : Number(value) < 100
+          ? "Minimum of ₦100"
+          : null,
     },
-  })
+  });
 
   const saveMoney = async (values: any) => {
-    const res = await fetch("https://eviafrica.com/mysave/users/debit", {
-      method: "POST",
-      body: JSON.stringify(values),
-      headers: {
-        Authorization: token,
-      },
-    })
+    const res = await fetch(
+      "https://mysave-backend.000webhostapp.com/mysave/backend/users/debit",
+      {
+        method: "POST",
+        body: JSON.stringify(values),
+        headers: {
+          Authorization: token,
+        },
+      }
+    );
 
-    const json = await res.json()
+    const json = await res.json();
 
-    return json
-  }
-
+    return json;
+  };
 
   const mutation = useMutation({
     mutationFn: saveMoney,
@@ -54,23 +65,23 @@ export default function Withdraw() {
         showNotification({
           message: data.message,
           color: "red",
-        })
+        });
       } else if (data.status === 1) {
-        setBalance(Number(userData.balance) - Number(variables.amount))
+        setBalance(Number(userData.balance) - Number(variables.amount));
 
-        setOpened(false)
+        setOpened(false);
 
         showNotification({
           message: data.message,
           color: "blue",
-        })
+        });
       }
     },
     onError: (error) => {
       // An error happened!
-      console.log(error)
+      console.log(error);
     },
-  })
+  });
 
   return (
     <>
@@ -114,7 +125,10 @@ export default function Withdraw() {
               label="Select Destination"
               placeholder="Select Destination?"
               labelProps={{ size: "xs", mb: "xs" }}
-              styles={{ input: { fontSize: "16px" }, item: { fontSize: "16px" } }}
+              styles={{
+                input: { fontSize: "16px" },
+                item: { fontSize: "16px" },
+              }}
               data={[
                 { value: "GTB", label: "GTB" },
                 { value: "Zenith", label: "Zenith Bank" },
@@ -138,7 +152,10 @@ export default function Withdraw() {
               label="Select what are you withdrawing for (optional)"
               placeholder="Reason"
               labelProps={{ size: "xs", mb: "xs" }}
-              styles={{ input: { fontSize: "16px" }, item: { fontSize: "16px" } }}
+              styles={{
+                input: { fontSize: "16px" },
+                item: { fontSize: "16px" },
+              }}
               data={[
                 { value: "Sapa", label: "Sapa" },
                 { value: "Omo x2000 😫", label: "Omo x2000 😫" },
@@ -186,5 +203,5 @@ export default function Withdraw() {
         </form>
       </Box>
     </>
-  )
+  );
 }
